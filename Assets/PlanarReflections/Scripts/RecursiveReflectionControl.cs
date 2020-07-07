@@ -3,7 +3,6 @@ using System.Linq;
 using UnityEngine;
 using Unity.Mathematics;
 using UnityEngine.Rendering;
-
 public class RecursiveReflectionControl : MonoBehaviour
 {
     [Header("STEP #1 - Planar Reflection Component Settings")]
@@ -11,7 +10,6 @@ public class RecursiveReflectionControl : MonoBehaviour
     public bool shadows =true;
     public bool occlusion =true;
     public bool msaa =true;
-    public bool additionalLights =true;
     public bool hdr =true;
     public LayerMask reflectLayers = -1;
     public ResolutionMultipliers resolutionMultiplier = ResolutionMultipliers.Full;
@@ -20,9 +18,7 @@ public class RecursiveReflectionControl : MonoBehaviour
     [Range(1, 100)] public int frameSkip = 1;
     [Range(1, 10)]
         public int msaaRecursiveCutoff = 1;
-     [Range(1, 10)]
-         public int pixelLightRecursiveCutoff = 1;
-         [Space]
+        [Space]
     [Header("EXPERIMENTAL -- STEP #3 - Recursive Planar Reflection Component Setup")]
    public bool recursiveReflectionGroups;
    public int recursiveGroup = 1;
@@ -35,7 +31,6 @@ public class RecursiveReflectionControl : MonoBehaviour
     private IList<RenderTexture>[,] _textures;
     [SerializeField,Header("Active Reflection Layers")]
     public PlanarReflectionSettings[] planarReflectionLayers;
-
     private Camera CamForList;
     public enum ResolutionMultipliers
     {
@@ -60,9 +55,7 @@ public class RecursiveReflectionControl : MonoBehaviour
     [SerializeField, HideInInspector]
     public List<RecursiveReflectionControl.PlanarReflectionSettings> prs =
         new List<RecursiveReflectionControl.PlanarReflectionSettings>();
-    ///
     /// ///////////////////////////
-    /// 
     void Start()
     {
         foreach (PlanarReflectionSettings p in planarReflectionLayers)
@@ -83,11 +76,11 @@ public class RecursiveReflectionControl : MonoBehaviour
             pls.addBlackColour = p.addBlackColour;
             pls.enableHdr = p.enableHdr;
             pls.enableMSAA = p.enableMsaa;
-            pls.enableLights = p.enableLights;
             script.enabled = true;
         }
         if (recursiveReflectionGroups)
-        {InitializeProperties();
+        {
+            InitializeProperties();
             _cameraList = new Camera[_planarReflectionScripts.Count + 1];
             RenderPipelineManager.beginCameraRendering += ExecutePlanarReflections; 
         }
@@ -108,7 +101,6 @@ public class RecursiveReflectionControl : MonoBehaviour
         public bool addBlackColour;
         public bool enableHdr;
         public bool enableMsaa;
-        public bool enableLights;
     }
     int GetNextCamIndex(int camIndex)
     {
@@ -117,10 +109,11 @@ public class RecursiveReflectionControl : MonoBehaviour
             return 0;
         return camIndex;
     }
-    Camera[] _cameraList;
+
+    private Camera[] _cameraList;
     private void ExecutePlanarReflections(ScriptableRenderContext arg1, Camera arg2)
     {
-        if (this != null && arg2 == Camera.main)
+        if (this != null)
         {
             if (_planarReflectionScripts.Count < 3 || levelsOfRecursion == 1)
             {
@@ -133,7 +126,7 @@ public class RecursiveReflectionControl : MonoBehaviour
                     {
                         if (_planarReflectionScripts[nextCamIndex] != null)
                             _cameraList[eachDepth] = _planarReflectionScripts[nextCamIndex]
-                                .ExecuteRenderSequence(_cameraList[eachDepth - 1], arg1, true, false)[0];
+                                .ExecuteRenderSequence(arg1, _cameraList[eachDepth - 1],  true, false);
                         nextCamIndex = GetNextCamIndex(nextCamIndex);
                     }
                     nextCamIndex = eachCam;
@@ -148,29 +141,22 @@ public class RecursiveReflectionControl : MonoBehaviour
                         }
                         if (_planarReflectionScripts_RenderCopy[nextCamIndex, eachDepth] != null)
                             _planarReflectionScripts_RenderCopy[nextCamIndex, eachDepth]
-                                .ExecuteRenderSequence(_cameraList[eachDepth], arg1, nextCamIndex == eachCam);
+                                .ExecuteRenderSequence(arg1,_cameraList[eachDepth],  nextCamIndex == eachCam);
                         nextCamIndex = GetNextCamIndex(nextCamIndex);
                     }
-                    _textures[eachCam, 0] = _planarReflectionScripts_RenderCopy[eachCam, 0].CopyTextures();
                 }
                 for (int eachCam = 0; eachCam < _planarReflectionScripts.Count; eachCam++)
                 {
-                    if (_planarReflectionScripts_RenderCopy[eachCam, 0] == null) continue;
-                    _planarReflectionScripts_RenderCopy[eachCam, 0].PasteTextures(_textures[eachCam, 0]);
-                    _planarReflectionScripts_RenderCopy[eachCam, 0].UpdateMaterialProperties(null);
+                    _planarReflectionScripts_RenderCopy[eachCam, 0].UpdateShader();
                 }
             }
             else
             {
                 for (int eachCam = 0; eachCam < _planarReflectionScripts.Count; eachCam++)
                 {
-                 
-                   
                     _cameraList[0] = null;
-                   
                     _cameraList[1] =
-                        _planarReflectionScripts[eachCam].ExecuteRenderSequence(null, arg1, true, false)[0];
-                   
+                        _planarReflectionScripts[eachCam].ExecuteRenderSequence(arg1,null);
                     var nextCam = eachCam;
                     for (int toDrawCam = 0; toDrawCam < _planarReflectionScripts.Count; toDrawCam++)
                     {
@@ -179,17 +165,13 @@ public class RecursiveReflectionControl : MonoBehaviour
                             continue;
                         }
                         nextCam = GetNextCamIndex(nextCam);
-                        _planarReflectionScripts_RenderCopy[nextCam, 1]
-                            .ExecuteRenderSequence(_cameraList[1], arg1, false);
-                        _textures[nextCam, 1] = _planarReflectionScripts_RenderCopy[nextCam, 1].CopyTextures();
+                        _planarReflectionScripts_RenderCopy[nextCam, 1].ExecuteRenderSequence(arg1,_cameraList[1]);
                     }
-                    _planarReflectionScripts_RenderCopy[eachCam, 0].ExecuteRenderSequence(null, arg1);
-                    _textures[eachCam, 0] = _planarReflectionScripts_RenderCopy[eachCam, 0].CopyTextures();
+                    _planarReflectionScripts_RenderCopy[eachCam, 0].ExecuteRenderSequence(arg1);
                 }
                 for (int eachCam = 0; eachCam < _planarReflectionScripts.Count; eachCam++)
                 {
-                    _planarReflectionScripts_RenderCopy[eachCam, 0].PasteTextures(_textures[eachCam, 0]);
-                    _planarReflectionScripts_RenderCopy[eachCam, 0].UpdateMaterialProperties(null);
+                    _planarReflectionScripts_RenderCopy[eachCam, 0].UpdateShader();
                 }
             }
         }
@@ -222,15 +204,6 @@ public class RecursiveReflectionControl : MonoBehaviour
                 else
                 {
                     copy.planarLayerSettings.enableMSAA = false;
-                }
-                if (_planarReflectionScripts[camIndex].planarLayerSettings.enableLights == false &&
-                    pixelLightRecursiveCutoff > depth)
-                {
-                    copy.planarLayerSettings.enableLights = false;
-                }
-                else
-                {
-                    copy.planarLayerSettings.enableLights = true;
                 }
                 _planarReflectionScripts_RenderCopy[camIndex, depth] = copy;
             }

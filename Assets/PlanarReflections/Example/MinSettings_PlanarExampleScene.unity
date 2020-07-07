@@ -628,7 +628,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b4d2c3f05b72034aa51483c3ce737d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thisCamera: {fileID: 0}
   planarLayerSettings:
     recursiveReflection: 0
     recursiveGroup: 1
@@ -643,7 +642,7 @@ MonoBehaviour:
       m_Bits: 4294967295
     resolutionMultiplier: 3
     shadows: 0
-    frameSkip: 1
+    frameSkip: 5
     occlusion: 0
     addBlackColour: 0
     enableHdr: 0
@@ -661,7 +660,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b4d2c3f05b72034aa51483c3ce737d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thisCamera: {fileID: 0}
   planarLayerSettings:
     recursiveReflection: 0
     recursiveGroup: 1
@@ -676,7 +674,7 @@ MonoBehaviour:
       m_Bits: 4294967295
     resolutionMultiplier: 3
     shadows: 0
-    frameSkip: 1
+    frameSkip: 5
     occlusion: 0
     addBlackColour: 0
     enableHdr: 0
@@ -694,7 +692,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8b4d2c3f05b72034aa51483c3ce737d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  thisCamera: {fileID: 0}
   planarLayerSettings:
     recursiveReflection: 0
     recursiveGroup: 1
@@ -709,7 +706,7 @@ MonoBehaviour:
       m_Bits: 4294967295
     resolutionMultiplier: 3
     shadows: 0
-    frameSkip: 1
+    frameSkip: 5
     occlusion: 0
     addBlackColour: 0
     enableHdr: 0

@@ -34,7 +34,6 @@
       <Path>.git</Path>
       <Path>.idea</Path>
       <Path>Library</Path>
-      <Path>Temp</Path>
       <Path>jobbuild</Path>
       <Path>monobuild</Path>
       <Path>obj</Path>

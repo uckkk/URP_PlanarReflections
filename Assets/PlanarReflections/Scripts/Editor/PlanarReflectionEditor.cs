@@ -36,7 +36,6 @@ public class PlanarReflectionEditor : Editor
             PlanarLayer.enableMsaa = rrc.msaa;
             PlanarLayer.occlusion = rrc.occlusion;
             PlanarLayer.shadows = rrc.shadows;
-            PlanarLayer.enableLights = rrc.additionalLights;
             PlanarLayer.resolutionMultiplier = rrc.resolutionMultiplier;
             PlanarLayer.reflectLayers = rrc.reflectLayers;
             prs.Add(PlanarLayer);
