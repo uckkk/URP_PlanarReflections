@@ -17,55 +17,54 @@ public class PlanarReflectionEditor : Editor
     public bool boolToogleButton_Back;
     [SerializeField]
     private RecursiveReflectionControl rrc;
-    SerializedObject GetTarget;
-    private List<RecursiveReflectionControl.PlanarReflectionSettings> prs =
-        new List<RecursiveReflectionControl.PlanarReflectionSettings>();
+    private SerializedObject _getTarget;
+    private List<PlanarReflectionSettings> _prs = new List<PlanarReflectionSettings>();
     private void OnEnable()
     { 
         rrc = ( RecursiveReflectionControl)target;
-            GetTarget = new SerializedObject(rrc);
+            _getTarget = new SerializedObject(rrc);
     }
-    public void Settingsbuild(RecursiveReflectionControl.PlanarReflectionSettings PlanarLayer)
+    private void Settingsbuild(PlanarReflectionSettings planarLayer)
     {
-            PlanarLayer.recursiveReflection = rrc.recursiveReflectionGroups;
-            PlanarLayer.recursiveGroup = rrc.recursiveGroup;
-            PlanarLayer.frameSkip = rrc.frameSkip;
-            PlanarLayer.addBlackColour = rrc.addBlackColour;
-            PlanarLayer.enableHdr = rrc.hdr;
-            PlanarLayer.clipPlaneOffset = rrc.reflectionOffset;
-            PlanarLayer.enableMsaa = rrc.msaa;
-            PlanarLayer.occlusion = rrc.occlusion;
-            PlanarLayer.shadows = rrc.shadows;
-            PlanarLayer.resolutionMultiplier = rrc.resolutionMultiplier;
-            PlanarLayer.reflectLayers = rrc.reflectLayers;
-            prs.Add(PlanarLayer);
+            planarLayer.recursiveReflection = rrc.recursiveReflectionGroups;
+            planarLayer.recursiveGroup = rrc.recursiveGroup;
+            planarLayer.frameSkip = rrc.frameSkip;
+            planarLayer.addBlackColour = rrc.addBlackColour;
+            planarLayer.enableHdr = rrc.hdr;
+            planarLayer.clipPlaneOffset = rrc.reflectionOffset;
+            planarLayer.enableMsaa = rrc.msaa;
+            planarLayer.occlusion = rrc.occlusion;
+            planarLayer.shadows = rrc.shadows;
+            planarLayer.resolutionMultiplier = rrc.resolutionMultiplier;
+            planarLayer.reflectLayers = rrc.reflectLayers;
+            _prs.Add(planarLayer);
     }
     public override void OnInspectorGUI() //2
     {
         base.OnInspectorGUI();
-        GetTarget.Update();
+        _getTarget.Update();
         boolToogleButton_Ground = rrc.boolToogleButton_Ground;
         boolToogleButton_Ceiling = rrc.boolToogleButton_Ceiling;
         boolToogleButton_Left = rrc.boolToogleButton_Left;
         boolToogleButton_Right = rrc.boolToogleButton_Right;
         boolToogleButton_Back = rrc.boolToogleButton_Back;
         boolToogleButton_Forward = rrc.boolToogleButton_Forward;
-        prs = rrc.prs;
+        _prs = rrc.prs;
         GUILayout.Space(20f);
         GUILayout.Label("STEP #4 - Complete setup by choosing planar direction");
         GUILayout.BeginHorizontal();
-        var PlanarLayer = new RecursiveReflectionControl.PlanarReflectionSettings();
+        var planarLayer = new PlanarReflectionSettings();
         if (boolToogleButton_Ground == false)
         {
             if (GUILayout.Button(Resources.Load<Texture>("Thumbnails/cubebottom"),
                 GUILayout.Width(thumbnailWidth), GUILayout.Height(thumbnailHeight)))
             {
                 boolToogleButton_Ground = true;
-                PlanarLayer.direction = new float3(0, 1, 0);
-                PlanarLayer.shaderName = "_PlanarGround";
-                Settingsbuild(PlanarLayer);
+                planarLayer.direction = new float3(0, 1, 0);
+                planarLayer.shaderPropertyName = "_PlanarGround";
+                Settingsbuild(planarLayer);
                 rrc.boolToogleButton_Ground = true;
-                GetTarget.ApplyModifiedProperties();
+                _getTarget.ApplyModifiedProperties();
             }
         }
         else
@@ -75,9 +74,9 @@ public class PlanarReflectionEditor : Editor
         {
             boolToogleButton_Ground = rrc.boolToogleButton_Ground;
             int removalint = 999;
-                for (int i =0; i < prs.Count; i++)
+                for (int i =0; i < _prs.Count; i++)
                 {
-                    if (prs[i].shaderName == "_PlanarGround")
+                    if (_prs[i].shaderPropertyName == "_PlanarGround")
                     {
                         removalint = i;
                         break;
@@ -86,9 +85,9 @@ public class PlanarReflectionEditor : Editor
                 if (removalint != 999)
                 {
                     boolToogleButton_Ground = false;
-                    prs.RemoveRange(removalint, 1);
+                    _prs.RemoveRange(removalint, 1);
                     rrc.boolToogleButton_Ground = false;
-                    GetTarget.ApplyModifiedProperties();
+                    _getTarget.ApplyModifiedProperties();
                 }
         }}
         if (boolToogleButton_Ceiling == false)
@@ -97,11 +96,11 @@ public class PlanarReflectionEditor : Editor
                 GUILayout.Width(thumbnailWidth), GUILayout.Height(thumbnailHeight)))
             {
                 boolToogleButton_Ceiling = true;
-                PlanarLayer.direction = new float3(0, -1, 0);
-                PlanarLayer.shaderName = "_PlanarCeiling";
-                Settingsbuild(PlanarLayer);
+                planarLayer.direction = new float3(0, -1, 0);
+                planarLayer.shaderPropertyName = "_PlanarCeiling";
+                Settingsbuild(planarLayer);
                 rrc.boolToogleButton_Ceiling = true;
-                GetTarget.ApplyModifiedProperties();
+                _getTarget.ApplyModifiedProperties();
             }
         }
         else
@@ -110,9 +109,9 @@ public class PlanarReflectionEditor : Editor
                 GUILayout.Width(thumbnailWidth), GUILayout.Height(thumbnailHeight)))
             {
                 int removalint = 999;
-                for (int i = 0; i < prs.Count; i++)
+                for (int i = 0; i < _prs.Count; i++)
                 {
-                    if (prs[i].shaderName == "_PlanarCeiling")
+                    if (_prs[i].shaderPropertyName == "_PlanarCeiling")
                     {
                         removalint = i;
                         break;
@@ -120,10 +119,10 @@ public class PlanarReflectionEditor : Editor
                 }
                 if (removalint != 999)
                 {
-                    prs.RemoveRange(removalint, 1);
+                    _prs.RemoveRange(removalint, 1);
                     boolToogleButton_Ceiling = false;
                     rrc.boolToogleButton_Ceiling = false;
-                    GetTarget.ApplyModifiedProperties();
+                    _getTarget.ApplyModifiedProperties();
                 }
             }
         }
@@ -133,11 +132,11 @@ public class PlanarReflectionEditor : Editor
                 GUILayout.Width(thumbnailWidth), GUILayout.Height(thumbnailHeight)))
             {
                 boolToogleButton_Right = true;
-                PlanarLayer.direction = new float3(1, 0, 0);
-                PlanarLayer.shaderName = "_PlanarRight";
-                Settingsbuild(PlanarLayer);
+                planarLayer.direction = new float3(1, 0, 0);
+                planarLayer.shaderPropertyName = "_PlanarRight";
+                Settingsbuild(planarLayer);
                 rrc.boolToogleButton_Right = true;
-                GetTarget.ApplyModifiedProperties();
+                _getTarget.ApplyModifiedProperties();
             }
         }
         else
@@ -147,9 +146,9 @@ public class PlanarReflectionEditor : Editor
             {
                 
                 int removalint = 999;
-                for (int i = 0; i < prs.Count; i++)
+                for (int i = 0; i < _prs.Count; i++)
                 {
-                    if (prs[i].shaderName == "_PlanarRight")
+                    if (_prs[i].shaderPropertyName == "_PlanarRight")
                     {
                         removalint = i;
                         break;
@@ -157,9 +156,9 @@ public class PlanarReflectionEditor : Editor
                 }
                 if (removalint != 999)
                 {boolToogleButton_Right = false;
-                    prs.RemoveRange(removalint, 1);
+                    _prs.RemoveRange(removalint, 1);
  rrc.boolToogleButton_Right = false;
- GetTarget.ApplyModifiedProperties();
+ _getTarget.ApplyModifiedProperties();
                 }
             }
         }
@@ -169,11 +168,11 @@ public class PlanarReflectionEditor : Editor
                 GUILayout.Width(thumbnailWidth), GUILayout.Height(thumbnailHeight)))
             {
                 boolToogleButton_Left = true;
-                PlanarLayer.direction = new float3(-1, 0, 0);
-                PlanarLayer.shaderName = "_PlanarLeft";
-                Settingsbuild(PlanarLayer);
+                planarLayer.direction = new float3(-1, 0, 0);
+                planarLayer.shaderPropertyName = "_PlanarLeft";
+                Settingsbuild(planarLayer);
                 rrc.boolToogleButton_Left = true;
-                GetTarget.ApplyModifiedProperties();
+                _getTarget.ApplyModifiedProperties();
             }
         }
         else
@@ -182,9 +181,9 @@ public class PlanarReflectionEditor : Editor
                 GUILayout.Width(thumbnailWidth), GUILayout.Height(thumbnailHeight)))
             {
                 int removalint = 999;
-                for (int i = 0; i < prs.Count; i++)
+                for (int i = 0; i < _prs.Count; i++)
                 {
-                    if (prs[i].shaderName == "_PlanarLeft")
+                    if (_prs[i].shaderPropertyName == "_PlanarLeft")
                     {
                         removalint = i;
                         break;
@@ -192,10 +191,10 @@ public class PlanarReflectionEditor : Editor
                 }
                 if (removalint != 999)
                 {
-                    prs.RemoveRange(removalint, 1);
+                    _prs.RemoveRange(removalint, 1);
                     rrc.boolToogleButton_Left =false;
                     boolToogleButton_Left = false;
-                    GetTarget.ApplyModifiedProperties();
+                    _getTarget.ApplyModifiedProperties();
                 }
             }
         }
@@ -205,11 +204,11 @@ public class PlanarReflectionEditor : Editor
                 GUILayout.Width(thumbnailWidth), GUILayout.Height(thumbnailHeight)))
             {
                 boolToogleButton_Forward = true;
-                PlanarLayer.direction = new float3(0, 0, 1);
-                PlanarLayer.shaderName = "_PlanarForward";
-                Settingsbuild(PlanarLayer);
+                planarLayer.direction = new float3(0, 0, 1);
+                planarLayer.shaderPropertyName = "_PlanarForward";
+                Settingsbuild(planarLayer);
                 rrc.boolToogleButton_Forward = true;
-                GetTarget.ApplyModifiedProperties();
+                _getTarget.ApplyModifiedProperties();
             }
         }
         else
@@ -218,9 +217,9 @@ public class PlanarReflectionEditor : Editor
                 GUILayout.Width(thumbnailWidth), GUILayout.Height(thumbnailHeight)))
             {
                 int removalint = 999;
-                for (int i = 0; i < prs.Count; i++)
+                for (int i = 0; i < _prs.Count; i++)
                 {
-                    if (prs[i].shaderName == "_PlanarForward")
+                    if (_prs[i].shaderPropertyName == "_PlanarForward")
                     {
                         removalint = i;
                         break;
@@ -228,10 +227,10 @@ public class PlanarReflectionEditor : Editor
                 }
                 if (removalint != 999)
                 {
-                    prs.RemoveRange(removalint, 1);
+                    _prs.RemoveRange(removalint, 1);
                     rrc.boolToogleButton_Forward = false;
                     boolToogleButton_Forward = false;
-                    GetTarget.ApplyModifiedProperties();
+                    _getTarget.ApplyModifiedProperties();
                 }
             }
         }
@@ -241,11 +240,11 @@ public class PlanarReflectionEditor : Editor
                 GUILayout.Width(thumbnailWidth), GUILayout.Height(thumbnailHeight)))
             {
                 boolToogleButton_Back = true;
-                PlanarLayer.direction = new float3(0, 0, -1);
-                PlanarLayer.shaderName = "_PlanarBack";
-                Settingsbuild(PlanarLayer);
+                planarLayer.direction = new float3(0, 0, -1);
+                planarLayer.shaderPropertyName = "_PlanarBack";
+                Settingsbuild(planarLayer);
                 rrc.boolToogleButton_Back = true;
-                GetTarget.ApplyModifiedProperties();
+                _getTarget.ApplyModifiedProperties();
             }
         }
         else
@@ -254,9 +253,9 @@ public class PlanarReflectionEditor : Editor
                 GUILayout.Width(thumbnailWidth), GUILayout.Height(thumbnailHeight)))
             {
                 int removalint = 999;
-                for (int i = 0; i < prs.Count; i++)
+                for (int i = 0; i < _prs.Count; i++)
                 {
-                    if (prs[i].shaderName == "_PlanarBack")
+                    if (_prs[i].shaderPropertyName == "_PlanarBack")
                     {
                         removalint = i;
                         break;
@@ -264,16 +263,16 @@ public class PlanarReflectionEditor : Editor
                 }
                 if (removalint != 999)
                 {
-                    prs.RemoveRange(removalint, 1);
+                    _prs.RemoveRange(removalint, 1);
                     boolToogleButton_Back = false;
                     rrc.boolToogleButton_Back = false;
-                    GetTarget.ApplyModifiedProperties();
+                    _getTarget.ApplyModifiedProperties();
                 }
             }
         }
-        rrc.planarReflectionLayers = prs.ToArray();
-        GetTarget.ApplyModifiedProperties();
-        EditorUtility.SetDirty(GetTarget.targetObject);
+        rrc.planarReflectionLayers = _prs.ToArray();
+        _getTarget.ApplyModifiedProperties();
+        EditorUtility.SetDirty(_getTarget.targetObject);
         GUILayout.EndHorizontal(); //4
     }
 }

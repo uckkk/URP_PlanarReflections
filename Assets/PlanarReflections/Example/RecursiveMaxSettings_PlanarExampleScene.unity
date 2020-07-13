@@ -565,6 +565,7 @@ GameObject:
   - component: {fileID: 1687258583}
   - component: {fileID: 1687258586}
   - component: {fileID: 1687258587}
+  - component: {fileID: 1687258588}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -715,7 +716,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1687258581}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2107a14a71cf77441a94da63bfc1874e, type: 3}
   m_Name: 
@@ -724,7 +725,6 @@ MonoBehaviour:
   shadows: 1
   occlusion: 1
   msaa: 1
-  additionalLights: 1
   hdr: 1
   reflectLayers:
     serializedVersion: 2
@@ -733,7 +733,6 @@ MonoBehaviour:
   addBlackColour: 0
   frameSkip: 1
   msaaRecursiveCutoff: 2
-  pixelLightRecursiveCutoff: 2
   recursiveReflectionGroups: 1
   recursiveGroup: 1
   levelsOfRecursion: 2
@@ -741,7 +740,7 @@ MonoBehaviour:
   planarReflectionLayers:
   - recursiveReflection: 1
     recursiveGroup: 1
-    shaderName: _PlanarGround
+    shaderPropertyName: 
     direction:
       x: 0
       y: 1
@@ -756,11 +755,10 @@ MonoBehaviour:
     occlusion: 1
     addBlackColour: 0
     enableHdr: 1
-    enableMsaa: 1
-    enableLights: 1
+    enableMSAA: 0
   - recursiveReflection: 1
     recursiveGroup: 1
-    shaderName: _PlanarRight
+    shaderPropertyName: 
     direction:
       x: 1
       y: 0
@@ -775,11 +773,10 @@ MonoBehaviour:
     occlusion: 1
     addBlackColour: 0
     enableHdr: 1
-    enableMsaa: 1
-    enableLights: 1
+    enableMSAA: 0
   - recursiveReflection: 1
     recursiveGroup: 1
-    shaderName: _PlanarForward
+    shaderPropertyName: 
     direction:
       x: 0
       y: 0
@@ -794,8 +791,7 @@ MonoBehaviour:
     occlusion: 1
     addBlackColour: 0
     enableHdr: 1
-    enableMsaa: 1
-    enableLights: 1
+    enableMSAA: 0
   boolToogleButton_Ground: 1
   boolToogleButton_Ceiling: 0
   boolToogleButton_Left: 0
@@ -805,7 +801,7 @@ MonoBehaviour:
   prs:
   - recursiveReflection: 1
     recursiveGroup: 1
-    shaderName: _PlanarGround
+    shaderPropertyName: 
     direction:
       x: 0
       y: 1
@@ -820,11 +816,10 @@ MonoBehaviour:
     occlusion: 1
     addBlackColour: 0
     enableHdr: 1
-    enableMsaa: 1
-    enableLights: 1
+    enableMSAA: 0
   - recursiveReflection: 1
     recursiveGroup: 1
-    shaderName: _PlanarRight
+    shaderPropertyName: 
     direction:
       x: 1
       y: 0
@@ -839,11 +834,10 @@ MonoBehaviour:
     occlusion: 1
     addBlackColour: 0
     enableHdr: 1
-    enableMsaa: 1
-    enableLights: 1
+    enableMSAA: 0
   - recursiveReflection: 1
     recursiveGroup: 1
-    shaderName: _PlanarForward
+    shaderPropertyName: 
     direction:
       x: 0
       y: 0
@@ -858,8 +852,151 @@ MonoBehaviour:
     occlusion: 1
     addBlackColour: 0
     enableHdr: 1
-    enableMsaa: 1
-    enableLights: 1
+    enableMSAA: 0
+--- !u!114 &1687258588
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1687258581}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2107a14a71cf77441a94da63bfc1874e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  reflectionOffset: 7.16
+  shadows: 1
+  occlusion: 1
+  msaa: 1
+  hdr: 1
+  reflectLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  resolutionMultiplier: 0
+  addBlackColour: 0
+  frameSkip: 1
+  msaaRecursiveCutoff: 1
+  recursiveReflectionGroups: 1
+  recursiveGroup: 1
+  levelsOfRecursion: 2
+  levelsOfShadowRecursion: 3
+  planarReflectionLayers:
+  - recursiveReflection: 1
+    recursiveGroup: 1
+    shaderPropertyName: _PlanarGround
+    direction:
+      x: 0
+      y: 1
+      z: 0
+    clipPlaneOffset: -3.43
+    reflectLayers:
+      serializedVersion: 2
+      m_Bits: 4294967295
+    resolutionMultiplier: 0
+    shadows: 1
+    frameSkip: 1
+    occlusion: 1
+    addBlackColour: 0
+    enableHdr: 1
+    enableMSAA: 1
+  - recursiveReflection: 1
+    recursiveGroup: 1
+    shaderPropertyName: _PlanarRight
+    direction:
+      x: 1
+      y: 0
+      z: 0
+    clipPlaneOffset: 7.16
+    reflectLayers:
+      serializedVersion: 2
+      m_Bits: 4294967295
+    resolutionMultiplier: 0
+    shadows: 1
+    frameSkip: 1
+    occlusion: 1
+    addBlackColour: 0
+    enableHdr: 1
+    enableMSAA: 1
+  - recursiveReflection: 1
+    recursiveGroup: 1
+    shaderPropertyName: _PlanarForward
+    direction:
+      x: 0
+      y: 0
+      z: 1
+    clipPlaneOffset: 7.16
+    reflectLayers:
+      serializedVersion: 2
+      m_Bits: 4294967295
+    resolutionMultiplier: 0
+    shadows: 1
+    frameSkip: 1
+    occlusion: 1
+    addBlackColour: 0
+    enableHdr: 1
+    enableMSAA: 1
+  boolToogleButton_Ground: 1
+  boolToogleButton_Ceiling: 0
+  boolToogleButton_Left: 0
+  boolToogleButton_Right: 1
+  boolToogleButton_Forward: 1
+  boolToogleButton_Back: 0
+  prs:
+  - recursiveReflection: 1
+    recursiveGroup: 1
+    shaderPropertyName: _PlanarGround
+    direction:
+      x: 0
+      y: 1
+      z: 0
+    clipPlaneOffset: -3.43
+    reflectLayers:
+      serializedVersion: 2
+      m_Bits: 4294967295
+    resolutionMultiplier: 0
+    shadows: 1
+    frameSkip: 1
+    occlusion: 1
+    addBlackColour: 0
+    enableHdr: 1
+    enableMSAA: 1
+  - recursiveReflection: 1
+    recursiveGroup: 1
+    shaderPropertyName: _PlanarRight
+    direction:
+      x: 1
+      y: 0
+      z: 0
+    clipPlaneOffset: 7.16
+    reflectLayers:
+      serializedVersion: 2
+      m_Bits: 4294967295
+    resolutionMultiplier: 0
+    shadows: 1
+    frameSkip: 1
+    occlusion: 1
+    addBlackColour: 0
+    enableHdr: 1
+    enableMSAA: 1
+  - recursiveReflection: 1
+    recursiveGroup: 1
+    shaderPropertyName: _PlanarForward
+    direction:
+      x: 0
+      y: 0
+      z: 1
+    clipPlaneOffset: 7.16
+    reflectLayers:
+      serializedVersion: 2
+      m_Bits: 4294967295
+    resolutionMultiplier: 0
+    shadows: 1
+    frameSkip: 1
+    occlusion: 1
+    addBlackColour: 0
+    enableHdr: 1
+    enableMSAA: 1
 --- !u!1 &2132423078
 GameObject:
   m_ObjectHideFlags: 0
